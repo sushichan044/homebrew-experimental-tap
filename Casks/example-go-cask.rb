@@ -20,7 +20,7 @@ cask "example-go-cask" do
 
       puts "release: #{release.inspect}"
 
-      release.assets.find { |asset| asset.name == name }.url
+      release["assets"].find { |asset| asset["name"] == name }["url"]
     end
 
     def self.token
