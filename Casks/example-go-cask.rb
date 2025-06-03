@@ -14,6 +14,8 @@ cask "example-go-cask" do
     def self.get_asset_api_url(tag, name)
       require "utils/github"
 
+      puts "get_release(\"sushichan044\", \"example-go-cask\", \"#{tag}\")"
+
       release = GitHub.get_release("sushichan044", "example-go-cask", tag)
 
       puts "Release: #{release.tag_name} (#{release.id})"
