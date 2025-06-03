@@ -14,11 +14,7 @@ cask "example-go-cask" do
     def self.get_asset_api_url(tag, name)
       require "utils/github"
 
-      puts "get_release(\"sushichan044\", \"example-go-cask\", \"#{tag}\")"
-
       release = GitHub.get_release("sushichan044", "example-go-cask", tag)
-
-      puts "release: #{release.inspect}"
 
       release["assets"].find { |asset| asset["name"] == name }["url"]
     end
