@@ -16,6 +16,8 @@ cask "example-go-cask" do
 
       release = GitHub.get_release("sushichan044", "example-go-cask", tag)
 
+      puts "Release: #{release.tag_name} (#{release.id})"
+
       release.assets.find { |asset| asset.name == name }.url
     end
 
