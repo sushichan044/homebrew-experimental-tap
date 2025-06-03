@@ -2,7 +2,7 @@
 cask "example-go-cask" do
   desc ""
   homepage ""
-  version "0.0.1"
+  version "0.0.2"
 
   livecheck do
     skip "Auto-generated on release."
@@ -11,33 +11,33 @@ cask "example-go-cask" do
   binary "example-go-cask"
 
   on_macos do
-    url "#{GitHubHelper.get_asset_api_url(v0.0.1, example-go-cask_Darwin_all.tar.gz)}",
+    url "#{GitHubHelper.get_asset_api_url("v0.0.2", "example-go-cask_Darwin_all.tar.gz")}",
         header: [
           "Accept: application/octet-stream",
           "Authorization: Bearer #{GitHubHelper.token}",
           "X-GitHub-Api-Version: 2022-11-28",
         ]
-    sha256 "51668a232151925b39538f3f09a55ab353285a3aaf4e9a57737f9198df2cff54"
+    sha256 "e18d94fcafe9e16d0d0aa6dd079c5afaa1faf3e629397b1be73d28795323b271"
   end
 
   on_linux do
     on_intel do
-      url "#{GitHubHelper.get_asset_api_url(v0.0.1, example-go-cask_Linux_x86_64.tar.gz)}",
+      url "#{GitHubHelper.get_asset_api_url("v0.0.2", "example-go-cask_Linux_x86_64.tar.gz")}",
         header: [
           "Accept: application/octet-stream",
           "Authorization: Bearer #{GitHubHelper.token}",
           "X-GitHub-Api-Version: 2022-11-28",
         ]
-      sha256 "14fe5da3d2ee866f060b6d71ad3095b6cc39995b2bda65b304963e45a8731671"
+      sha256 "fa79ca91a6b43a96e3539b0ee2995fd08f2591ef27155ccedb7633ee4d6bd9ab"
     end
     on_arm do
-      url "#{GitHubHelper.get_asset_api_url(v0.0.1, example-go-cask_Linux_arm64.tar.gz)}",
+      url "#{GitHubHelper.get_asset_api_url("v0.0.2", "example-go-cask_Linux_arm64.tar.gz")}",
         header: [
           "Accept: application/octet-stream",
           "Authorization: Bearer #{GitHubHelper.token}",
           "X-GitHub-Api-Version: 2022-11-28",
         ]
-      sha256 "c199bbb48fc92cbaa965090bc409716f171c2c93bdd0e670500d51ef9cc69d69"
+      sha256 "62c9dd56b455f1daed884f88671f84d88c58941fbe96d2af8de725567d56cce4"
     end
   end
 
