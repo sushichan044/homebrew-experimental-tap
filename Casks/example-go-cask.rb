@@ -66,7 +66,7 @@ cask "example-go-cask" do
 
   postflight do
     if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
-      system_command "/usr/bin/xattr", args: ["-drs", "com.apple.quarantine", "#{caskroom_path}/#{version}/example-go-cask"]
+      system_command "/usr/bin/xattr", args: ["-drs", "com.apple.quarantine", "#{caskroom_path}/#{version}/#{token}"]
     end
   end
 
