@@ -69,7 +69,6 @@ cask "example-go-cask" do
       system_command "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "#{HOMEBREW_PREFIX.join("bin")}/example-go-cask"]
     end
 
-    puts "cask.caskroom_path: #{cask.caskroom_path}"
     puts "caskroom_path: #{caskroom_path}"
   end
 
