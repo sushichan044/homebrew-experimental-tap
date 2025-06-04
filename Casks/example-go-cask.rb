@@ -26,7 +26,7 @@ cask "example-go-cask" do
 
       unless @github_token
         @github_token = GitHub::API.credentials
-        raise CurlDownloadStrategyError, "Failed to retrieve token" if @github_token.nil? || @github_token.empty?
+        raise "Failed to retrieve token" if @github_token.nil? || @github_token.empty?
       end
 
       @github_token
