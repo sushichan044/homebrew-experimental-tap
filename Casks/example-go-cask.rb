@@ -65,7 +65,7 @@ cask "example-go-cask" do
   end
 
   postflight do
-    if OS.mac?
+    if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
       system_command "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "#{HOMEBREW_PREFIX.join("bin")}/example-go-cask"]
     end
   end
