@@ -66,11 +66,8 @@ cask "example-go-cask" do
 
   postflight do
     if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
-      system_command "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "#{HOMEBREW_PREFIX.join("bin")}/example-go-cask"]
+      system_command "/usr/bin/xattr", args: ["-d", "-r", "-s", "com.apple.quarantine", "#{caskroom_path}/#{version}/example-go-cask"]
     end
-
-    puts caskroom_path.inspect
-    puts "caskroom_path: #{caskroom_path}/#{version}/example-go-cask"
   end
 
   # No zap stanza required
