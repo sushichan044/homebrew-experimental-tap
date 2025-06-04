@@ -69,7 +69,8 @@ cask "example-go-cask" do
       system_command "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "#{HOMEBREW_PREFIX.join("bin")}/example-go-cask"]
     end
 
-    puts "caskroom_path: #{caskroom_path}"
+    puts caskroom_path.inspect
+    puts "caskroom_path: #{caskroom_path}/#{version}/example-go-cask"
   end
 
   # No zap stanza required
