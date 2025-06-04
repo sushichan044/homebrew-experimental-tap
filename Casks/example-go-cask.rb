@@ -72,7 +72,9 @@ cask "example-go-cask" do
 
     pp stage_path
 
-    system_command "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "#{Homebrew.prefix.join("bin")}/example-go-cask"]
+    pp Homebrew.inspect
+
+    system_command "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "#{HOMEBREW_PREFIX.join("bin")}/example-go-cask"]
   end
 
   # No zap stanza required
