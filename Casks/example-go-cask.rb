@@ -2,13 +2,44 @@
 cask "example-go-cask" do
   desc ""
   homepage ""
-  version "0.0.3"
+  version "0.0.7"
 
   livecheck do
     skip "Auto-generated on release."
   end
 
   binary "example-go-cask"
+
+  on_macos do
+    url "#{GitHubHelper.get_asset_api_url("v0.0.7", "example-go-cask_Darwin_all.tar.gz")}",
+        header: [
+          "Accept: application/octet-stream",
+          "Authorization: Bearer #{GitHubHelper.token}",
+          "X-GitHub-Api-Version: 2022-11-28",
+        ]
+    sha256 "b23514f05dbc9c9e9b9e0b4aee044b799b96cdbf6087b23c478e56ec69a4f73e"
+  end
+
+  on_linux do
+    on_intel do
+      url "#{GitHubHelper.get_asset_api_url("v0.0.7", "example-go-cask_Linux_x86_64.tar.gz")}",
+        header: [
+          "Accept: application/octet-stream",
+          "Authorization: Bearer #{GitHubHelper.token}",
+          "X-GitHub-Api-Version: 2022-11-28",
+        ]
+      sha256 "75bcbb32975621d6013c41436d3503b95ec09c608e474c044f06d813c04861d8"
+    end
+    on_arm do
+      url "#{GitHubHelper.get_asset_api_url("v0.0.7", "example-go-cask_Linux_arm64.tar.gz")}",
+        header: [
+          "Accept: application/octet-stream",
+          "Authorization: Bearer #{GitHubHelper.token}",
+          "X-GitHub-Api-Version: 2022-11-28",
+        ]
+      sha256 "eb86beb85299255c4575c5b4047e8ab01748138e1eb391823b0dbdb1178b4218"
+    end
+  end
 
   module GitHubHelper
     def self.get_asset_api_url(tag, name)
@@ -33,35 +64,15 @@ cask "example-go-cask" do
     end
   end
 
-  on_macos do
-    url "#{GitHubHelper.get_asset_api_url("v0.0.3", "example-go-cask_Darwin_all.tar.gz")}",
-        header: [
-          "Accept: application/octet-stream",
-          "Authorization: Bearer #{GitHubHelper.token}",
-          "X-GitHub-Api-Version: 2022-11-28",
-        ]
-    sha256 "98a7ca8929311b89a39af64348128f9a4c2a481cecc75a9d81e0939c5a4ce98f"
-  end
+  postflight do
+    # if xattr not exists, early return
+    if system_command("type", args: ["/usr/bin/xattr"]).exit_status != 0
+      exit 0
+    end
 
-  on_linux do
-    on_intel do
-      url "#{GitHubHelper.get_asset_api_url("v0.0.3", "example-go-cask_Linux_x86_64.tar.gz")}",
-        header: [
-          "Accept: application/octet-stream",
-          "Authorization: Bearer #{GitHubHelper.token}",
-          "X-GitHub-Api-Version: 2022-11-28",
-        ]
-      sha256 "48c3c7bb03c2684e9bba09df99673770f57a39c0c96f6e23b08ed8b82c0466b9"
-    end
-    on_arm do
-      url "#{GitHubHelper.get_asset_api_url("v0.0.3", "example-go-cask_Linux_arm64.tar.gz")}",
-        header: [
-          "Accept: application/octet-stream",
-          "Authorization: Bearer #{GitHubHelper.token}",
-          "X-GitHub-Api-Version: 2022-11-28",
-        ]
-      sha256 "3887a579d83fde3d8b7a130ce7e0956de7e10d2453ce25ae86367d5b25f9c957"
-    end
+    pp stage_path
+
+    system_command "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "#{stage_path}/example-go-cask"]
   end
 
   # No zap stanza required
