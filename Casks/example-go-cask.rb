@@ -72,7 +72,7 @@ cask "example-go-cask" do
 
     pp stage_path
 
-    system_command "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "#{stage_path}/example-go-cask"]
+    system_command "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "#{Homebrew.bin}/example-go-cask"]
   end
 
   # No zap stanza required
