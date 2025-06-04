@@ -65,12 +65,9 @@ cask "example-go-cask" do
   end
 
   postflight do
-    # if xattr not exists, early return
-    if system_command("/usr/bin/xattr", args: ["-h"]).exit_status != 0
-      exit 0
+    if OS.mac?
+      system_command "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "#{HOMEBREW_PREFIX.join("bin")}/example-go-cask"]
     end
-
-    system_command "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "#{HOMEBREW_PREFIX.join("bin")}/example-go-cask"]
   end
 
   # No zap stanza required
