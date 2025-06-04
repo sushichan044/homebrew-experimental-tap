@@ -10,6 +10,29 @@ cask "example-go-cask" do
 
   binary "example-go-cask"
 
+  module GitHubHelper
+    def self.get_asset_api_url(tag, name)
+      require "utils/github"
+
+      release = GitHub.get_release("sushichan044", "example-go-cask", tag)
+
+      release["assets"].find { |asset| asset["name"] == name }["url"]
+    end
+
+    def self.token
+      require "utils/github"
+
+      @github_token = ENV["HOMEBREW_GITHUB_API_TOKEN"]
+
+      unless @github_token
+        @github_token = GitHub::API.credentials
+        raise CurlDownloadStrategyError, "Failed to retrieve token" if @github_token.nil? || @github_token.empty?
+      end
+
+      @github_token
+    end
+  end
+
   on_macos do
     url "#{GitHubHelper.get_asset_api_url("v0.0.7", "example-go-cask_Darwin_all.tar.gz")}",
         header: [
@@ -38,29 +61,6 @@ cask "example-go-cask" do
           "X-GitHub-Api-Version: 2022-11-28",
         ]
       sha256 "eb86beb85299255c4575c5b4047e8ab01748138e1eb391823b0dbdb1178b4218"
-    end
-  end
-
-  module GitHubHelper
-    def self.get_asset_api_url(tag, name)
-      require "utils/github"
-
-      release = GitHub.get_release("sushichan044", "example-go-cask", tag)
-
-      release["assets"].find { |asset| asset["name"] == name }["url"]
-    end
-
-    def self.token
-      require "utils/github"
-
-      @github_token = ENV["HOMEBREW_GITHUB_API_TOKEN"]
-
-      unless @github_token
-        @github_token = GitHub::API.credentials
-        raise CurlDownloadStrategyError, "Failed to retrieve token" if @github_token.nil? || @github_token.empty?
-      end
-
-      @github_token
     end
   end
 
