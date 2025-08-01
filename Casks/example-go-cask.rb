@@ -76,14 +76,6 @@ cask "example-go-cask" do
 
   postflight do
     if OS.mac?
-      puts "macOS now"
-    end
-
-    if OS.linux?
-      puts "Linux now"
-    end
-
-    if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
       system_command "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "#{staged_path}/#{token}"]
     end
   end
