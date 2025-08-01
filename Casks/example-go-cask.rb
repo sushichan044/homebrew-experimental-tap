@@ -75,12 +75,12 @@ cask "example-go-cask" do
   end
 
   postflight do
-    on_macos do
-      puts "We are in macOS"
+    if OS.mac?
+      puts "macOS now"
     end
 
-    on_linux do
-      puts "We are in Linux"
+    if OS.linux?
+      puts "Linux now"
     end
 
     if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
