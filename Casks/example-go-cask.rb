@@ -11,30 +11,40 @@ cask "example-go-cask" do
   binary "example-go-cask"
 
   module GitHubHelper
-    def self.get_asset_api_url(tag, name)
-      require "utils/github"
-
-      release = GitHub.get_release("sushichan044", "example-go-cask", tag)
-
-      release["assets"].find { |asset| asset["name"] == name }["url"]
-    end
-
     def self.token
       require "utils/github"
 
-      @github_token = ENV["HOMEBREW_GITHUB_API_TOKEN"]
-
-      unless @github_token
-        @github_token = GitHub::API.credentials
-        raise "Failed to retrieve token" if @github_token.nil? || @github_token.empty?
+      github_token = ENV["HOMEBREW_GITHUB_API_TOKEN"]
+      unless github_token
+        github_token = GitHub::API.credentials
+        raise "Failed to retrieve token" if github_token.nil? || github_token.empty?
       end
 
-      @github_token
+      github_token
+    end
+
+    def self.release_asset_api_url(tag, name)
+      require "net/http"
+      require "uri"
+      require "utils/github"
+
+      resp = Net::HTTP.get(
+        # see: https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28#get-a-release-by-tag-name
+        URI.parse("https://api.github.com/repos/goreleaser/example/releases/tags/#{tag}"),
+        {
+          "Accept" => "application/vnd.github+json",
+          "Authorization" => "Bearer #{token}",
+          "X-GitHub-Api-Version" => "2022-11-28"
+        }
+      )
+
+      release = JSON.parse(resp)
+      release["assets"].find { |asset| asset["name"] == name }["url"]
     end
   end
 
   on_macos do
-    url "#{GitHubHelper.get_asset_api_url("v0.0.7", "example-go-cask_Darwin_all.tar.gz")}",
+    url "#{GitHubHelper.release_asset_api_url("v0.0.7", "example-go-cask_Darwin_all.tar.gz")}",
         header: [
           "Accept: application/octet-stream",
           "Authorization: Bearer #{GitHubHelper.token}",
@@ -45,7 +55,7 @@ cask "example-go-cask" do
 
   on_linux do
     on_intel do
-      url "#{GitHubHelper.get_asset_api_url("v0.0.7", "example-go-cask_Linux_x86_64.tar.gz")}",
+      url "#{GitHubHelper.release_asset_api_url("v0.0.7", "example-go-cask_Linux_x86_64.tar.gz")}",
         header: [
           "Accept: application/octet-stream",
           "Authorization: Bearer #{GitHubHelper.token}",
@@ -54,7 +64,7 @@ cask "example-go-cask" do
       sha256 "75bcbb32975621d6013c41436d3503b95ec09c608e474c044f06d813c04861d8"
     end
     on_arm do
-      url "#{GitHubHelper.get_asset_api_url("v0.0.7", "example-go-cask_Linux_arm64.tar.gz")}",
+      url "#{GitHubHelper.release_asset_api_url("v0.0.7", "example-go-cask_Linux_arm64.tar.gz")}",
         header: [
           "Accept: application/octet-stream",
           "Authorization: Bearer #{GitHubHelper.token}",
@@ -65,6 +75,14 @@ cask "example-go-cask" do
   end
 
   postflight do
+    if defined?(on_linux)
+      puts "on_linux DSL is available"
+    end
+
+    if defined?(on_macos)
+      puts "on_macos DSL is available"
+    end
+
     if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
       system_command "/usr/bin/xattr", args: ["-d", "com.apple.quarantine", "#{staged_path}/#{token}"]
     end
