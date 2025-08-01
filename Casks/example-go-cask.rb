@@ -39,9 +39,6 @@ cask "example-go-cask" do
       )
 
       release = JSON.parse(resp)
-
-      puts "Release: #{release}"
-
       release["assets"].find { |asset| asset["name"] == name }["url"]
     end
   end
@@ -78,12 +75,12 @@ cask "example-go-cask" do
   end
 
   postflight do
-    if defined?(on_linux)
-      puts "on_linux DSL is available"
+    on_macos do
+      puts "We are in macOS"
     end
 
-    if defined?(on_macos)
-      puts "on_macos DSL is available"
+    on_linux do
+      puts "We are in Linux"
     end
 
     if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
