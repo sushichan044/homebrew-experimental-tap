@@ -30,7 +30,7 @@ cask "example-go-cask" do
 
       resp = Net::HTTP.get(
         # see: https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28#get-a-release-by-tag-name
-        URI.parse("https://api.github.com/repos/goreleaser/example/releases/tags/#{tag}"),
+        URI.parse("https://api.github.com/repos/goreleaser/sushichan044/example-go-cask/tags/#{tag}"),
         {
           "Accept" => "application/vnd.github+json",
           "Authorization" => "Bearer #{token}",
