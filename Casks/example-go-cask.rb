@@ -39,6 +39,9 @@ cask "example-go-cask" do
       )
 
       release = JSON.parse(resp)
+
+      puts "Release: #{release}"
+
       release["assets"].find { |asset| asset["name"] == name }["url"]
     end
   end
